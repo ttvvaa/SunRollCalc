@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Calc";
+}
+
+
+<h2>Calc</h2>
+
+
+<small>
+    @ViewBag.Json
+
+    <br />
+
+    @*<div>@ViewBag.Smeta</div>*@
+</small>
+
+
+<br />
+<br />
+
+<table>
+    @foreach (var e in (List<SunRollCalc.Controllers.EstimatePosition>)ViewBag.Estimates)
+    {
+        <tr><td>@e.Caption</td><td>@e.Price</td></tr>
+    }
+</table>
+
+<div>ИТОГО: <strong>@{var s = ((List<SunRollCalc.Controllers.EstimatePosition>)ViewBag.Estimates).Sum(e => e.Price); 
+                      @s;}</strong></div>
