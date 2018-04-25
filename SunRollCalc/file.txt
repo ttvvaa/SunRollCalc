@@ -1,0 +1,2 @@
+2018-04-25 14:58:20.4075|INFO|SunRollCalc.Controllers.CalcController|smeta
+2018-04-25 14:58:20.4506|DEBUG|SunRollCalc.Controllers.CalcController|smeta2

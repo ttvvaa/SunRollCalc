@@ -79,6 +79,11 @@ namespace SunRollCalc.Controllers
             ViewBag.Smeta = smeta;
             ViewBag.Estimates = estimate;
 
+            //Elmah.ErrorLog.Default.Log();
+            var logger = NLog.LogManager.GetCurrentClassLogger();
+            logger.Info("smeta");
+            logger.Debug("smeta2");
+
             return View();
         }
     }
