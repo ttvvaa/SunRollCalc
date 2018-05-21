@@ -46,8 +46,6 @@ namespace SunRollCalc.Controllers
 
             List<EstimatePosition> estimate = new List<EstimatePosition>();
 
-
-
             EstimatePosition m;
             if (v.Mounting == "int")
                 m = calc.CalculateInt(v);
