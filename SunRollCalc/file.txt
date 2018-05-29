@@ -1,2 +1,12 @@
 2018-04-25 14:58:20.4075|INFO|SunRollCalc.Controllers.CalcController|smeta
 2018-04-25 14:58:20.4506|DEBUG|SunRollCalc.Controllers.CalcController|smeta2
+2018-04-25 15:00:47.6546|INFO|SunRollCalc.Controllers.CalcController|smeta
+2018-04-25 15:00:47.6917|DEBUG|SunRollCalc.Controllers.CalcController|smeta2
+2018-04-25 15:00:56.4107|INFO|SunRollCalc.Controllers.CalcController|smeta
+2018-04-25 15:00:56.4147|DEBUG|SunRollCalc.Controllers.CalcController|smeta2
+2018-04-25 15:07:54.5744|INFO|SunRollCalc.Controllers.CalcController|smeta
+2018-04-25 15:07:54.5744|DEBUG|SunRollCalc.Controllers.CalcController|smeta2
+2018-05-21 21:16:21.8049|INFO|SunRollCalc.Controllers.CalcController|smeta
+2018-05-21 21:16:21.9924|DEBUG|SunRollCalc.Controllers.CalcController|smeta2
+2018-05-29 19:10:41.3177|INFO|SunRollCalc.Controllers.CalcController|smeta
+2018-05-29 19:10:41.3737|DEBUG|SunRollCalc.Controllers.CalcController|smeta2
