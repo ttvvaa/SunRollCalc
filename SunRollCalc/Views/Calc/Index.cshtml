@@ -1,13 +1,15 @@
 ﻿@{
-	Layout = null;
+    Layout = null;
 }
 
 <!DOCTYPE html>
 
 <html>
 <head>
-	<meta name="viewport" content="width=device-width" />
-	<title>Калькулятор</title>
+    <meta name="viewport" content="width=device-width" />
+    <title>Калькулятор</title>
+    <script type="text/javascript" src="~/Scripts/vue.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/axios.min.js"></script>
 
 	<style>
 		input[type="radio"]:checked + label {
@@ -23,67 +25,89 @@
 	</style>
 </head>
 <body>
-	<h2>
-		Калькулятор
-	</h2>
+    <h2>
+       Калькулятор 
+    </h2>
 
-	<form method="post" action="~/Calc/Calc">
-		<table>
-			<caption><strong>Расчет стоимости рольставни из поликарбоната</strong></caption>
-			<tbody>
-				<tr>
-					<td>Ширина проема (мм)</td>
+    <form method="post" action="~/Calc/Calc">
+        <table>
+            <caption><strong>Расчет стоимости рольставни из поликарбоната</strong></caption>
+            <tbody>
+                <tr>
+                    <td>Ширина проема (мм)</td>
 					<td><input name="width" value="1500" class="rborder" /></td>
-				</tr>
-				<tr>
-					<td>Высота проема (мм)</td>
+                </tr>
+                <tr>
+                    <td>Высота проема (мм)</td>
 					<td><input name="height" value="2000" class="rborder" /></td>
-				</tr>
-				<tr>
-					<td>Тип монтажа</td>
-					<td>
+                </tr>
+                <tr>
+                    <td>Тип монтажа</td>
+                    <td>
 						@*<select name="mounting">
-								<option value="ext">Накладной</option>
-								<option value="int">Встроенный</option>
+                            <option value="ext">Накладной</option>
+                            <option value="int">Встроенный</option>
 							</select>*@
 						<input id="ext" type="radio" name="mounting" value="ext"><label for="ext">Накладной</label>
 						<input id="int" type="radio" name="mounting" value="int"><label for="int">Встроенный</label>
-					</td>
-				</tr>
-				<tr>
-					<td>Тип управления</td>
-					<td>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Тип управления</td>
+                    <td>
 						@*<select name="control">
-							<option value="manual">Ручной</option>
-							<option value="auto">Автоматический</option>
+                            <option value="manual">Ручной</option>
+                            <option value="auto">Автоматический</option>
 						</select>*@
 						<input id="manual" type="radio" name="control" value="manual"><label for="manual">Ручной</label>
 						<input id="auto" type="radio" name="control" value="auto"><label for="auto">Автоматический</label>
 					</td>
-				</tr>
-				<tr>
-					<td>Замок с ключом</td>
-					<td><input name="bLock" type="checkbox" /></td>
-				</tr>
-				<tr>
-					<td>Аварийное открытие</td>
+                </tr>
+                <tr>
+                    <td>Замок с ключом</td>
+                    <td><input name="bLock" type="checkbox" /></td>
+                </tr>
+                <tr>
+                    <td>Аварийное открытие</td>
 					<td><input name="bEmegency" type="checkbox" /></td>
-				</tr>
-				<tr>
-					<td>Дистанционное управление</td>
-					<td><input name="bRemote" type="checkbox" /></td>
-				</tr>
-				<tr>
-					<td>Монтаж</td>
-					<td><input name="bMount" type="checkbox" /></td>
-				</tr>
-				<tr>
-					<td>Доставка</td>
+                </tr>
+                <tr>
+                    <td>Дистанционное управление</td>
+                    <td><input name="bRemote" type="checkbox" /></td>
+                </tr>
+                <tr>
+                    <td>Монтаж</td>
+                    <td><input name="bMount" type="checkbox" /></td>
+                </tr>
+                <tr>
+                    <td>Доставка</td>
 					<td><input name="bDelivery" type="checkbox" /><input name="kmDelivery" value="0" /></td>
-				</tr>
-			</tbody>
-		</table>
-		<button type="submit" value="Submit">Рассчитать стоимость</button>
-	</form>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit" value="Submit">Рассчитать стоимость</button>
+    </form>
+
+    
+    
+    <div id="app">
+        {{ message }}
+    </div>
+
+    <script>
+    const v = new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello Vue.js!'
+        }
+    })
+    </script>
+
+
 </body>
+
+
+
+
+
 </html>

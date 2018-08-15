@@ -46,8 +46,6 @@ namespace SunRollCalc.Controllers
 
             List<EstimatePosition> estimate = new List<EstimatePosition>();
 
-
-
             EstimatePosition m;
             if (v.Mounting == "int")
                 m = calc.CalculateInt(v);
@@ -78,6 +76,11 @@ namespace SunRollCalc.Controllers
             ViewBag.Json = json;
             ViewBag.Smeta = smeta;
             ViewBag.Estimates = estimate;
+
+            //Elmah.ErrorLog.Default.Log();
+            var logger = NLog.LogManager.GetCurrentClassLogger();
+            logger.Info("smeta");
+            logger.Debug("smeta2");
 
             return View();
         }
