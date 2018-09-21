@@ -9,10 +9,17 @@
     <meta name="viewport" content="width=device-width" />
     <title>Калькулятор</title>
 	<link href="@Url.Content("~/Content/main.css")" rel="stylesheet" type="text/css" />
-    <script type="text/javascript" src="~/Scripts/vue.min.js"></script>
+    
+	@*<link href="~/Content/bootstrap.min.css" rel="stylesheet">
+	<link href="~/Content/font-awesome.min.css" rel="stylesheet">
+	<link href="~/Content/style.css" rel="stylesheet">*@
+
+
+	<script type="text/javascript" src="~/Scripts/vue.min.js"></script>
     <script type="text/javascript" src="~/Scripts/axios.min.js"></script>
 
 	<style>
+		input[type="checkbox"]:checked + label,
 		input[type="radio"]:checked + label {
 			font-weight: bold;
 		}
@@ -65,24 +72,24 @@
 					</td>
                 </tr>
                 <tr>
-                    <td>Замок с ключом</td>
-                    <td><input name="bLock" type="checkbox" /></td>
+                    <td></td>
+                    <td><input id="bLock" type="checkbox"  checked/><label for="bLock">Замок с ключом</label></td>
                 </tr>
                 <tr>
-                    <td>Аварийное открытие</td>
-					<td><input name="bEmegency" type="checkbox" /></td>
+                    <td></td>
+					<td><input id="bEmegency" type="checkbox" /><label for="bEmegency">Аварийное открытие</label></td>
                 </tr>
                 <tr>
-                    <td>Дистанционное управление</td>
-                    <td><input name="bRemote" type="checkbox" /></td>
+                    <td></td>
+                    <td><input id="bRemote" type="checkbox" /><label for="bRemote">Дистанционное управление</label></td>
                 </tr>
                 <tr>
                     <td>Монтаж</td>
-                    <td><input name="bMount" type="checkbox" /></td>
+                    <td><input id="bMount" type="checkbox" /><label for="bMount">Монтаж</label></td>
                 </tr>
                 <tr>
                     <td>Доставка</td>
-					<td><input name="bDelivery" type="checkbox" /><input name="kmDelivery" value="0" /></td>
+					<td><input id="bDelivery" type="checkbox" /><input name="kmDelivery" value="0" /></td>
                 </tr>
             </tbody>
         </table>

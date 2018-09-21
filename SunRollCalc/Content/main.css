@@ -1,4 +1,4 @@
-@charset "UTF-8";
+﻿@charset "UTF-8";
 @import url(font-awesome.min.css);
 @import "https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600";
 
@@ -1585,7 +1585,8 @@
 /* Type */
 
 	body, input, select, textarea {
-		color: #9a9a9a;
+		/*color: #9a9a9a;*/
+		color: black;
 		font-family: "Source Sans Pro", Arial, Helvetica, sans-serif;
 		font-size: 14pt;
 		font-weight: 400;
@@ -2054,7 +2055,7 @@
 		-moz-appearance: none;
 		-webkit-appearance: none;
 		-ms-appearance: none;
-		appearance: none;
+		/*appearance: none;*/
 		display: block;
 		float: left;
 		margin-right: -2em;
@@ -2108,6 +2109,7 @@
 			border-color: #6cc091;
 			color: #ffffff;
 			content: '\f00c';
+			visibility:visible;
 		}
 
 		input[type="checkbox"]:focus + label:before,
