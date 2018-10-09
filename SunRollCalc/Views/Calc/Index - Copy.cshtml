@@ -1,0 +1,152 @@
+﻿@{
+	Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Калькулятор</title>
+	<link href="@Url.Content("~/Content/main.css")" rel="stylesheet" type="text/css" />
+
+	<link href="~/Content/bootstrap.min.css" rel="stylesheet">
+		<link href="~/Content/font-awesome.min.css" rel="stylesheet">
+		<link href="~/Content/style.css" rel="stylesheet">
+
+
+	<script type="text/javascript" src="~/Scripts/vue.min.js"></script>
+	<script type="text/javascript" src="~/Scripts/axios.min.js"></script>
+
+	<style>
+		input[type="checkbox"]:checked + label,
+		input[type="radio"]:checked + label {
+			font-weight: bold;
+		}
+
+		.rborder {
+			border-radius: 5px;
+			-moz-border-radius: 5px;
+			-webkit-border-radius: 5px;
+			border: 1px solid #058001;
+			text-align: right;
+		}
+	</style>
+</head>
+<body>
+	<h3>
+		Расчет стоимости рольставни из поликарбоната
+	</h3>
+
+	<form method="post" action="~/Calc/Calc">
+		<table>
+			@*<caption><strong></strong></caption>*@
+			<tbody>
+				<tr>
+					<td>Ширина проема (мм)</td>
+					<td><input name="width" value="1500" /></td>
+				</tr>
+				<tr>
+					<td>Высота проема (мм)</td>
+					<td><input name="height" value="2000" /></td>
+				</tr>
+				<tr>
+					<td>Тип монтажа</td>
+					<td>
+						@*<select name="mounting">
+							<option value="ext">Накладной</option>
+							<option value="int">Встроенный</option>
+							</select>*@
+						<input id="ext" type="radio" name="mounting" value="ext"><label for="ext">Накладной</label>
+						<input id="int" type="radio" name="mounting" value="int"><label for="int">Встроенный</label>
+					</td>
+				</tr>
+				<tr>
+					<td>Тип управления</td>
+					<td>
+						@*<select name="control">
+								<option value="manual">Ручной</option>
+								<option value="auto">Автоматический</option>
+							</select>*@
+						<input id="manual" type="radio" name="control" value="manual"><label for="manual">Ручной</label>
+						<input id="auto" type="radio" name="control" value="auto"><label for="auto">Автоматический</label>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input id="bLock" type="checkbox" checked /><label for="bLock">Замок с ключом</label></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input id="bEmegency" type="checkbox" /><label for="bEmegency">Аварийное открытие</label></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input id="bRemote" type="checkbox" /><label for="bRemote">Дистанционное управление</label></td>
+				</tr>
+				<tr>
+					<td>Монтаж</td>
+					<td><input id="bMount" type="checkbox" /><label for="bMount">Монтаж</label></td>
+				</tr>
+				<tr>
+					<td>Доставка</td>
+					<td><input id="bDelivery" type="checkbox" /><input name="kmDelivery" value="0" /></td>
+				</tr>
+			</tbody>
+		</table>
+		<div id="app">
+			<h1>{{ message }}</h1>
+		</div>
+		<button type="submit" value="Submit">Рассчитать стоимость</button>
+	</form>
+
+
+
+	
+
+	<script>
+		//const v = new Vue({
+		//	el: '#app',
+		//	data: {
+		//		message: 'Hello Vue.js!'
+		//	}
+		//})
+
+		
+
+		new Vue({
+			el: '#app',
+			data() {
+				return { message: null };
+		    },
+
+		mounted() {
+			axios({
+				method: 'post',
+				url: '/Calc/TestJson',
+				data: {
+					"Name": 'nnnn',
+					"Value": 'vvvv'
+				}
+			})
+                .then(response => {
+                	this.message = response.data.Name + ' ----- ' + response.data.Value
+                })
+                .catch(function (error) {
+                	console.log(error);
+                });
+		}
+
+
+		});
+
+	</script>
+
+
+</body>
+
+
+
+
+
+</html>

@@ -1,28 +1,29 @@
 ﻿@{
-    Layout = null;
+	Layout = null;
 }
 
 <!DOCTYPE html>
 
 <html>
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Калькулятор</title>
+	<meta name="viewport" content="width=device-width" />
+	<title>Калькулятор</title>
 	<link href="@Url.Content("~/Content/main.css")" rel="stylesheet" type="text/css" />
-    
-	@*<link href="~/Content/bootstrap.min.css" rel="stylesheet">
-	<link href="~/Content/font-awesome.min.css" rel="stylesheet">
-	<link href="~/Content/style.css" rel="stylesheet">*@
+
+	<link href="~/Content/bootstrap.min.css" rel="stylesheet">
+	@*<link href="~/Content/font-awesome.min.css" rel="stylesheet">*@
+	<link href="~/Content/style.css" rel="stylesheet">
 
 
 	<script type="text/javascript" src="~/Scripts/vue.min.js"></script>
-    <script type="text/javascript" src="~/Scripts/axios.min.js"></script>
+	<script type="text/javascript" src="~/Scripts/axios.min.js"></script>
 
 	<style>
 		input[type="checkbox"]:checked + label,
 		input[type="radio"]:checked + label {
 			font-weight: bold;
 		}
+
 		.rborder {
 			border-radius: 5px;
 			-moz-border-radius: 5px;
@@ -33,83 +34,218 @@
 	</style>
 </head>
 <body>
-    <h2>
-       Калькулятор 
-    </h2>
+	<h2>
+		Расчет стоимости рольставни из поликарбоната
+	</h2>
 
-    <form method="post" action="~/Calc/Calc">
-        <table>
-            <caption><strong>Расчет стоимости рольставни из поликарбоната</strong></caption>
-            <tbody>
-                <tr>
-                    <td>Ширина проема (мм)</td>
-					<td><input name="width" value="1500" /></td>
-                </tr>
-                <tr>
-                    <td>Высота проема (мм)</td>
-					<td><input name="height" value="2000" /></td>
-                </tr>
-                <tr>
-                    <td>Тип монтажа</td>
-                    <td>
-						@*<select name="mounting">
-                            <option value="ext">Накладной</option>
-                            <option value="int">Встроенный</option>
-							</select>*@
-						<input id="ext" type="radio" name="mounting" value="ext"><label for="ext">Накладной</label>
-						<input id="int" type="radio" name="mounting" value="int"><label for="int">Встроенный</label>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Тип управления</td>
-                    <td>
-						@*<select name="control">
-                            <option value="manual">Ручной</option>
-                            <option value="auto">Автоматический</option>
-						</select>*@
-						<input id="manual" type="radio" name="control" value="manual"><label for="manual">Ручной</label>
-						<input id="auto" type="radio" name="control" value="auto"><label for="auto">Автоматический</label>
-					</td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><input id="bLock" type="checkbox"  checked/><label for="bLock">Замок с ключом</label></td>
-                </tr>
-                <tr>
-                    <td></td>
-					<td><input id="bEmegency" type="checkbox" /><label for="bEmegency">Аварийное открытие</label></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td><input id="bRemote" type="checkbox" /><label for="bRemote">Дистанционное управление</label></td>
-                </tr>
-                <tr>
-                    <td>Монтаж</td>
-                    <td><input id="bMount" type="checkbox" /><label for="bMount">Монтаж</label></td>
-                </tr>
-                <tr>
-                    <td>Доставка</td>
-					<td><input id="bDelivery" type="checkbox" /><input name="kmDelivery" value="0" /></td>
-                </tr>
-            </tbody>
-        </table>
-        <button type="submit" value="Submit">Рассчитать стоимость</button>
-    </form>
 
-    
-    
-    <div id="app">
-        {{ message }}
-    </div>
+	@*<div id="app">
+			<form @@submit.prevent="submitForm">
+				<div>
+					<label for="name">Name:</label><br>
+					<input id="name" type="text" v-model="name" required />
+				</div>
+				<div>
+					<label for="email">Email:</label><br>
+					<input id="email" type="email" v-model="email" required />
+				</div>
+				<div>
+					<label for="caps">HOW DO I TURN OFF CAPS LOCK:</label><br>
+					<textarea id="caps" v-model="caps" required></textarea>
+				</div>
+				<button class="[name ? activeClass : '']" type="submit">Submit</button>
+				<div>
+					<h3>Response from server:</h3>
+					<pre>{{ response }}</pre>
+				</div>
+			</form>
+		</div>
 
-    <script>
-    const v = new Vue({
-        el: '#app',
-        data: {
-            message: 'Hello Vue.js!'
-        }
-    })
-    </script>
+		<script>
+		new Vue({
+			el: '#app',
+			data() {
+			return {
+			  name: '',
+			  email: '',
+			  caps: '',
+			  response: '',
+			 activeClass: 'active'
+		   }
+		},
+		methods: {
+			submitForm() {
+				axios.post('//jsonplaceholder.typicode.com/posts', {
+					name: this.name,
+					email: this.email,
+					caps: this.caps
+				}).then(response => {
+					this.response = JSON.stringify(response, null, 2)
+				})
+			}
+		}
+		})
+		</script>*@
+
+
+	<div id="app">
+
+		<form id="calc-form" @@submit.prevent="submitForm">
+			<table>
+				<tbody>
+					<tr>
+						<td>Ширина проема (мм)</td>
+						<td><input v-model="width" type="number" value="1500" /></td>
+					</tr>
+					<tr>
+						<td>Высота проема (мм)</td>
+						<td><input v-model="height" type="number" value="2000" /></td>
+					</tr>
+					<tr>
+						<td>Тип монтажа</td>
+						<td>
+							<input v-model="mounting" id="ext" type="radio" name="mounting" value="ext"><label for="ext">Накладной</label>
+							<input v-model="mounting" id="int" type="radio" name="mounting" value="int"><label for="int">Встроенный</label>
+						</td>
+					</tr>
+					<tr>
+						<td>Тип управления</td>
+						<td>
+							<input v-model="control" id="manual" type="radio" name="control" value="manual"><label for="manual">Ручной</label>
+							<input v-model="control" id="auto" type="radio" name="control" value="auto"><label for="auto">Автоматический</label>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><input v-model="lock" id="bLock" type="checkbox" /><label for="bLock">Замок с ключом</label></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><input v-model="emergencyopen" id="bEmegency" type="checkbox" /><label for="bEmegency">Аварийное открытие</label></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><input v-model="remotecontrol" id="bRemote" type="checkbox" /><label for="bRemote">Дистанционное управление</label></td>
+					</tr>
+					<tr>
+						<td>Монтаж</td>
+						<td><input v-model="ismounting" id="bMount" type="checkbox" /><label for="bMount">Монтаж</label></td>
+					</tr>
+					<tr>
+						<td>Доставка (Москва и область, км от МКАД)@*<input v-model="isdelivery" id="bDelivery" type="checkbox" />*@</td>
+						<td>
+							<div>
+								<input v-model="kmdelivery" name="kmDelivery" value="0" />
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h1>{{ message }}</h1>
+
+			<button type="submit" value="Submit">Рассчитать стоимость</button>
+		</form>
+
+		<ul id="smeta">
+			<li v-for="item in items">
+				{{ item.Caption }} {{ item.Price }} руб.
+			</li>
+		</ul>
+
+
+
+	</div>
+
+
+	<script>
+		new Vue({
+			el: '#app',
+			data() {
+			return {
+			//items : [ {Caption: '', Price: 0 } ],
+			items : [ ],
+			message: '0',
+		width: '2000',
+		height: '1000',
+		mounting: 'int',
+		control: 'manual',
+		lock: '',
+		emergencyopen: '',
+		remotecontrol: '',
+		ismounting: '',
+		isdelivery: '',
+		kmdelivery: 0
+		}
+		},
+		methods: {
+			submitForm() {
+				axios.post('/Calc/CalcPolicarbon', {
+					width: this.width,
+					height: this.height,
+					mounting: this.mounting,
+					control: this.control,
+					lock:  this.lock,
+					emergencyopen:  this.emergencyopen,
+					remotecontrol:  this.remotecontrol,
+					ismounting:  this.ismounting,
+					isdelivery:  this.isdelivery,
+					kmdelivery: this.kmdelivery
+				}).then(response => {
+					//this.message = JSON.stringify(response, null, 2)
+					this.message = response.data.Price;
+				    this.items = response.data.Estimate;
+			})
+		}
+		}
+		})
+	</script>
+
+
+
+
+
+
+
+	@*<script>
+			new Vue({
+				el: '#app',
+				data() {
+					//return { message: null };
+				return {			Width: this.width,
+			Height: this.height,
+			message: 'm'
+			};
+			},
+
+			methods: {
+					processForm: function() {
+						console.log({ Width: this.width, Height: this.height });
+						alert('Processing!');
+					}
+			}
+
+			//mounted() {
+			//	axios({
+			//		method: 'post',
+			//		url: '/Calc/CalcPolicarbon',
+			//		data: {
+			//			"Width": width,
+			//			"Height": height
+			//		}
+			//	})
+			//        .then(response => {
+			//        	this.message = response
+			//        })
+			//        .catch(function (error) {
+			//        	console.log(error);
+			//        });
+			//}
+
+
+			});
+
+		</script>*@
 
 
 </body>
