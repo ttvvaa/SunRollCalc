@@ -29,7 +29,7 @@ namespace SunRollCalc.Controllers
 			v.Height = Int32.Parse(form["height"]);
 
 			v.Mounting = form["mounting"];
-			v.Control = form["control"];
+			//v.Control = form["control"];
 
 			v.Lock = form["bLock"] == "on";
 			v.EmergencyOpen = form["bEmegency"] == "on";
@@ -120,6 +120,9 @@ namespace SunRollCalc.Controllers
 					}
 					if (v.IsMounting)
 						estimate.Add(calc.CalculateMounting(v));
+
+					if (v.Lock)
+						estimate.Add(new EstimatePosition("Замок с ключом:", 500) );
 
 					//if (v.IsDelivery)
 					if (v.KmDelivery > 0)
@@ -448,7 +451,7 @@ namespace SunRollCalc.Controllers
 		public string Mounting { get; set; } // INT, EXT
 
 		// Тип управления
-		public string Control { get; set; } // MANUAL, AUTO
+		//public string Control { get; set; } // MANUAL, AUTO
 
 		// Замок с ключом
 		public bool Lock { get; set; }
