@@ -1,257 +1,212 @@
 ﻿@{
-	Layout = null;
+    Layout = null;
 }
 
 <!DOCTYPE html>
 
 <html>
 <head>
-	<meta name="viewport" content="width=device-width" />
-	<title>Калькулятор</title>
-	<link href="@Url.Content("~/Content/main.css")" rel="stylesheet" type="text/css" />
+    <meta name="viewport" content="width=device-width" />
+    <title>Калькулятор</title>
+    <link href="@Url.Content("~/Content/main.css")" rel="stylesheet" type="text/css" />
 
-	<link href="~/Content/bootstrap.min.css" rel="stylesheet">
-	@*<link href="~/Content/font-awesome.min.css" rel="stylesheet">*@
-	<link href="~/Content/style.css" rel="stylesheet">
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet">
+    @*<link href="~/Content/font-awesome.min.css" rel="stylesheet">*@
+    @*<link href="~/Content/style.css" rel="stylesheet">*@
 
 
-	<script type="text/javascript" src="~/Scripts/vue.min.js"></script>
-	<script type="text/javascript" src="~/Scripts/axios.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/vue.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/axios.min.js"></script>
 
-	<style>
-		input[type="checkbox"]:checked + label,
-		input[type="radio"]:checked + label {
-			font-weight: bold;
-		}
-
-		.rborder {
-			border-radius: 5px;
-			-moz-border-radius: 5px;
-			-webkit-border-radius: 5px;
-			border: 1px solid #058001;
-			text-align: right;
-		}
-	</style>
 </head>
 <body>
-	<h2>
-		Расчет стоимости рольставни из поликарбоната
-	</h2>
+    <h2>
+        Расчет стоимости рольставни из поликарбоната
+    </h2>
 
 
-	@*<div id="app">
-			<form @@submit.prevent="submitForm">
-				<div>
-					<label for="name">Name:</label><br>
-					<input id="name" type="text" v-model="name" required />
-				</div>
-				<div>
-					<label for="email">Email:</label><br>
-					<input id="email" type="email" v-model="email" required />
-				</div>
-				<div>
-					<label for="caps">HOW DO I TURN OFF CAPS LOCK:</label><br>
-					<textarea id="caps" v-model="caps" required></textarea>
-				</div>
-				<button class="[name ? activeClass : '']" type="submit">Submit</button>
-				<div>
-					<h3>Response from server:</h3>
-					<pre>{{ response }}</pre>
-				</div>
-			</form>
-		</div>
+    <!-- template for the modal component -->
+    <script type="text/x-template" id="modal-template">
+        <transition name="modal">
+            <div class="modal-mask">
+                <div class="modal-wrapper">
+                    <div class="modal-container">
 
-		<script>
-		new Vue({
-			el: '#app',
-			data() {
-			return {
-			  name: '',
-			  email: '',
-			  caps: '',
-			  response: '',
-			 activeClass: 'active'
-		   }
-		},
-		methods: {
-			submitForm() {
-				axios.post('//jsonplaceholder.typicode.com/posts', {
-					name: this.name,
-					email: this.email,
-					caps: this.caps
-				}).then(response => {
-					this.response = JSON.stringify(response, null, 2)
-				})
-			}
-		}
-		})
-		</script>*@
+                        <div class="modal-header">
+                            <slot name="header">Смета:</slot>
+                        </div>
+
+                        <div class="modal-body">
+                            <slot name="body" class="container-fluid">
+                                <div v-for="item in items" class="row">
+                                    <div class="col-xs-6" style="background-color:lavender;">{{ item.Caption }}</div>
+                                    <div class="col-xs-6" style="background-color:lavenderblush;">{{ item.Price }} руб.</div>
+                                </div>
+                                <form id="send-smeta">
+                                    <label for="email">Ф.И.О.</label><input v-model="fio" id="fio">
+                                    <label for="email">E-mail</label><input v-model="email" id="email">
+                                    <label for="email">Телефон</label><input v-model="phone" id="phone">
+                                </form>
+                            </slot>
+                        </div>
+
+                        <div class="modal-footer">
+                            <slot name="footer">
+                                <strong>{{ message }}</strong>
+                                <button class="modal-default-button" @@click="$emit('close')">
+                                    OK
+                                </button>
+                            </slot>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </transition>
+    </script>
 
 
-	<div id="app">
+    <div id="app">
+        <form id="calc-form" @@submit.prevent="submitForm">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>Ширина проема (мм)</td>
+                        <td><input v-model="width" type="number" value="1500" min="0" max="4555"/></td>
+                    </tr>
+                    <tr>
+                        <td>Высота проема (мм)</td>
+                        <td><input v-model="height" type="number" value="2000" min="0" max="3015"/></td>
+                    </tr>
+                    <tr>
+                        <td>Тип монтажа</td>
+                        <td>
+                            <input v-model="mounting" id="ext" type="radio" name="mounting" value="ext"><label for="ext">Накладной</label>
+                            <input v-model="mounting" id="int" type="radio" name="mounting" value="int"><label for="int">Встроенный</label>
+                        </td>
+                    </tr>
+                    @*<tr>
+                            <td>Тип управления</td>
+                            <td>
+                                <input v-model="control" id="manual" type="radio" name="control" value="manual"><label for="manual">Ручной</label>
+                                <input v-model="control" id="auto" type="radio" name="control" value="auto"><label for="auto">Автоматический</label>
+                            </td>
+                        </tr>*@
+                    <tr>
+                        <td></td>
+                        <td><input v-model="lock" id="bLock" type="checkbox" /><label for="bLock">Замок с ключом</label></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input v-model="emergencyopen" id="bEmegency" type="checkbox" /><label for="bEmegency">Аварийное открытие</label></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input v-model="remotecontrol" id="bRemote" type="checkbox" /><label for="bRemote">Дистанционное управление</label></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><input v-model="ismounting" id="bMount" type="checkbox" /><label for="bMount">Монтаж</label></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <input v-model="isdelivery" id="bDelivery" type="checkbox" /><label for="bDelivery">Доставка</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="kmDelivery" :disabled="!isdelivery">Москва и область, км от МКАД</label></td>
+                        <td>
+                            <input v-model="kmdelivery" name="kmDelivery" value="0" disabled="!isdelivery" min="0" max="200" />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
-		<form id="calc-form" @@submit.prevent="submitForm">
-			<table>
-				<tbody>
-					<tr>
-						<td>Ширина проема (мм)</td>
-						<td><input v-model="width" type="number" value="1500" /></td>
-					</tr>
-					<tr>
-						<td>Высота проема (мм)</td>
-						<td><input v-model="height" type="number" value="2000" /></td>
-					</tr>
-					<tr>
-						<td>Тип монтажа</td>
-						<td>
-							<input v-model="mounting" id="ext" type="radio" name="mounting" value="ext"><label for="ext">Накладной</label>
-							<input v-model="mounting" id="int" type="radio" name="mounting" value="int"><label for="int">Встроенный</label>
-						</td>
-					</tr>
-					@*<tr>
-						<td>Тип управления</td>
-						<td>
-							<input v-model="control" id="manual" type="radio" name="control" value="manual"><label for="manual">Ручной</label>
-							<input v-model="control" id="auto" type="radio" name="control" value="auto"><label for="auto">Автоматический</label>
-						</td>
-					</tr>*@
-					<tr>
-						<td></td>
-						<td><input v-model="lock" id="bLock" type="checkbox" /><label for="bLock">Замок с ключом</label></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td><input v-model="emergencyopen" id="bEmegency" type="checkbox" /><label for="bEmegency">Аварийное открытие</label></td>
-					</tr>
-					<tr>
-						<td></td>
-						<td><input v-model="remotecontrol" id="bRemote" type="checkbox" /><label for="bRemote">Дистанционное управление</label></td>
-					</tr>
-					<tr>
-						<td>Монтаж</td>
-						<td><input v-model="ismounting" id="bMount" type="checkbox" /><label for="bMount">Монтаж</label></td>
-					</tr>
-					<tr>
-						<td>Доставка (Москва и область, км от МКАД)@*<input v-model="isdelivery" id="bDelivery" type="checkbox" />*@</td>
-						<td>
-							<div>
-								<input v-model="kmdelivery" name="kmDelivery" value="0" />
-							</div>
-						</td>
-					</tr>
-				</tbody>
-			</table>
+            <h1>{{ message }}</h1>
 
-			<h1>{{ message }}</h1>
+            @*<ul id="smeta">
+                    <li v-for="item in items">
+                        {{ item.Caption }} {{ item.Price }} руб.
+                    </li>
+                </ul>*@
 
-			<button type="submit" value="Submit">Рассчитать стоимость</button>
-		</form>
+            <button type="submit" value="Submit">Рассчитать стоимость</button>
 
-		<ul id="smeta">
-			<li v-for="item in items">
-				{{ item.Caption }} {{ item.Price }} руб.
-			</li>
-		</ul>
+            <button id="show-modal" @@click="showModal = true">Смета</button>
+
+            <modal v-bind:items="items" v-bind:message="message" v-if="showModal" @@close="showModal = false">
+                <h3 slot="header">Стоимость рольставни из поликарбоната</h3>
+            </modal>
+
+        </form>
 
 
 
-	</div>
 
 
-	<script>
-		new Vue({
-			el: '#app',
-			data() {
-			return {
+    </div>
+
+
+
+
+
+    <script>
+        Vue.component('modal', {
+            props: ['items', 'message'],
+            data() {
+              return { fio: '', email: '', phone: '' }
+            },
+            template: '#modal-template'
+        });
+
+        new Vue({
+            el: '#app',
+            data() {
+		return {
 			//items : [ {Caption: '', Price: 0 } ],
-			items : [ ],
-			message: '0',
-		width: '2000',
-		height: '1000',
-		mounting: 'int',
-		control: 'manual',
-		lock: '',
-		emergencyopen: '',
-		remotecontrol: '',
-		ismounting: '',
-		isdelivery: '',
-		kmdelivery: 0
+            items : [ ],
+        message: '0',
+        width: '2000',
+        height: '1000',
+        mounting: 'int',
+        control: 'manual',
+        lock: '',
+        emergencyopen: '',
+        remotecontrol: '',
+        ismounting: '',
+        isdelivery: '',
+        kmdelivery: 0,
+        showModal: false
+        }
+        },
+        methods: {
+            submitForm() {
+                axios.post('/Calc/CalcPolicarbon', {
+                    width: this.width,
+                    height: this.height,
+                    mounting: this.mounting,
+                    control: this.control,
+                    lock:  this.lock,
+                    emergencyopen:  this.emergencyopen,
+                    remotecontrol:  this.remotecontrol,
+                    ismounting:  this.ismounting,
+                    isdelivery:  this.isdelivery,
+                    kmdelivery: this.kmdelivery
+                }).then(response => {
+                    //this.message = JSON.stringify(response, null, 2)
+                    this.message = response.data.Price;
+                this.items = response.data.Estimate;
+            })
 		}
-		},
-		methods: {
-			submitForm() {
-				axios.post('/Calc/CalcPolicarbon', {
-					width: this.width,
-					height: this.height,
-					mounting: this.mounting,
-					control: this.control,
-					lock:  this.lock,
-					emergencyopen:  this.emergencyopen,
-					remotecontrol:  this.remotecontrol,
-					ismounting:  this.ismounting,
-					isdelivery:  this.isdelivery,
-					kmdelivery: this.kmdelivery
-				}).then(response => {
-					//this.message = JSON.stringify(response, null, 2)
-					this.message = response.data.Price;
-				    this.items = response.data.Estimate;
-			})
-		}
-		}
-		})
-	</script>
+        }
+        })
+    </script>
 
 
 
 
 
-
-
-	@*<script>
-			new Vue({
-				el: '#app',
-				data() {
-					//return { message: null };
-				return {			Width: this.width,
-			Height: this.height,
-			message: 'm'
-			};
-			},
-
-			methods: {
-					processForm: function() {
-						console.log({ Width: this.width, Height: this.height });
-						alert('Processing!');
-					}
-			}
-
-			//mounted() {
-			//	axios({
-			//		method: 'post',
-			//		url: '/Calc/CalcPolicarbon',
-			//		data: {
-			//			"Width": width,
-			//			"Height": height
-			//		}
-			//	})
-			//        .then(response => {
-			//        	this.message = response
-			//        })
-			//        .catch(function (error) {
-			//        	console.log(error);
-			//        });
-			//}
-
-
-			});
-
-		</script>*@
 
 
 </body>
-
-
-
-
-
 </html>
