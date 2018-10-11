@@ -15,8 +15,11 @@
     @*<link href="~/Content/style.css" rel="stylesheet">*@
 
 
-    <script type="text/javascript" src="~/Scripts/vue.min.js"></script>
-    <script type="text/javascript" src="~/Scripts/axios.min.js"></script>
+    @*<script type="text/javascript" src="~/Scripts/vue.min.js"></script>
+    <script type="text/javascript" src="~/Scripts/axios.min.js"></script>*@
+
+	<script type="text/javascript" src="~/Scripts/vue.js"></script>
+	<script type="text/javascript" src="~/Scripts/axios.js"></script>
 
 </head>
 <body>
@@ -30,23 +33,30 @@
         <transition name="modal">
             <div class="modal-mask">
                 <div class="modal-wrapper">
-                    <div class="modal-container">
+					<div class="modal-container">
 
-                        <div class="modal-header">
-                            <slot name="header">Смета:</slot>
-                        </div>
+						<div class="modal-header">
+							<slot name="header">Смета:</slot>
+						</div>
 
-                        <div class="modal-body">
-                            <slot name="body" class="container-fluid">
-                                <div v-for="item in items" class="row">
-                                    <div class="col-xs-6" style="background-color:lavender;">{{ item.Caption }}</div>
-                                    <div class="col-xs-6" style="background-color:lavenderblush;">{{ item.Price }} руб.</div>
-                                </div>
-                                <form id="send-smeta">
-                                    <label for="email">Ф.И.О.</label><input v-model="fio" id="fio">
-                                    <label for="email">E-mail</label><input v-model="email" id="email">
-                                    <label for="email">Телефон</label><input v-model="phone" id="phone">
-                                </form>
+						<div class="modal-body">
+							<slot name="body" class="container-fluid">
+								@*<div v-for="item in items" class="row">
+						<div class="col-xs-6" style="background-color:lavender;">{{ item.Caption }}</div>
+						<div class="col-xs-6" style="background-color:lavenderblush;">{{ item.Price }} руб.</div>
+					</div>*@
+								@*<form id="send-smeta">
+						<div class="row"><label for="email">Ф.И.О.</label><input v-model="fio" id="fio"></div>
+						<div class="row"><label for="email">E-mail</label><input v-model="email" id="email"></div>
+						<div class="row"><label for="email">Телефон</label><input v-model="phone" id="phone"></div>
+					</form>*@
+								<form id="send-smeta">
+									<table>
+										<tr><td><label for="email">Ф.И.О.</label></td><td><input v-model="fio" id="fio"></td></tr>
+										<tr><td><label for="email">E-mail</label></td><td><input v-model="email" id="email"></td></tr>
+										<tr><td><label for="email">Телефон</label></td><td><input v-model="phone" id="phone"></td></tr>
+									</table>
+								</form>
                             </slot>
                         </div>
 
@@ -124,19 +134,23 @@
 
             <h1>{{ message }}</h1>
 
-            @*<ul id="smeta">
+            <ul id="smeta">
                     <li v-for="item in items">
                         {{ item.Caption }} {{ item.Price }} руб.
                     </li>
-                </ul>*@
+                </ul>
 
             <button type="submit" value="Submit">Рассчитать стоимость</button>
 
             <button id="show-modal" @@click="showModal = true">Смета</button>
 
-            <modal v-bind:items="items" v-bind:message="message" v-if="showModal" @@close="showModal = false">
+            @*<modal v-bind:items="items" v-bind:message="message" v-if="showModal" @@close="showModal = false">
                 <h3 slot="header">Стоимость рольставни из поликарбоната</h3>
-            </modal>
+            </modal>*@
+
+			<modal v-bind:message="message" v-if="showModal" @@close="showModal = false">
+			<h3 slot="header">Заказать</h3>
+		</modal>
 
         </form>
 
