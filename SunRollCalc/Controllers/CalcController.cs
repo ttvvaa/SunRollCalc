@@ -101,17 +101,6 @@ namespace SunRollCalc.Controllers
         [HttpPost]
         public JsonResult CalcPolicarbon([System.Web.Http.FromBody]InputValues v)
         {
-			GMailer.GmailUsername = ConfigurationManager.AppSettings["GmailUserNameKey"];
-			GMailer.GmailPassword = ConfigurationManager.AppSettings["GmailPasswordKey"];
-
-			GMailer mailer = new GMailer();
-			mailer.ToEmail = "ttvvaa@gmail.com";
-			mailer.Subject = "Verify your email id";
-			mailer.Body = "Thanks for Registering your account.<br> please verify your email id by clicking the link <br> <a href='youraccount.com/verifycode=12323232'>verify</a>";
-			mailer.IsHtml = true;
-			mailer.Send();
-
-
             try
             {
                 string price = Server.MapPath("~/App_Data/table_policarbon.xlsx");
@@ -149,6 +138,40 @@ namespace SunRollCalc.Controllers
                 return Json(new { Price = -1, Error = ex.Message });
             }
         }
+
+		[HttpPost]
+		public JsonResult SendEmail(string fio, string email, string phone, string body)
+		{
+			try
+			{
+				//GMailer.GmailUsername = ConfigurationManager.AppSettings["GmailUserNameKey"];
+				//GMailer.GmailPassword = ConfigurationManager.AppSettings["GmailPasswordKey"];
+				//GMailer mailer = new GMailer();
+				//mailer.ToEmail = "ttvvaa@gmail.com";
+				//mailer.Subject = "Verify your email id";
+				//mailer.Body = "Thanks for Registering your account.<br> please verify your email id by clicking the link <br> <a href='youraccount.com/verifycode=12323232'>verify</a>";
+				//mailer.IsHtml = true;
+				//mailer.Send();
+
+				// TODO тут созраняем в БД
+				
+				GMailer.GmailUsername = ConfigurationManager.AppSettings["GmailUserNameKey"];
+				GMailer.GmailPassword = ConfigurationManager.AppSettings["GmailPasswordKey"];
+				GMailer mailer = new GMailer();
+				mailer.ToEmail = !String.IsNullOrWhiteSpace(email) ? email : "info@sun-roll.ru";
+				mailer.Subject = "Заказ рольставни";
+				mailer.Body = body;
+				mailer.IsHtml = true;
+				mailer.Send();
+
+
+				return Json(new { Status = "OK" });
+			}
+			catch (Exception ex)
+			{
+				return Json(new { Status = "ERROR" });
+			}
+		}
     }
 
 
@@ -272,7 +295,7 @@ namespace SunRollCalc.Controllers
             int w = Array.IndexOf(widthsInt, v.Width);
             //		
             if (w > -1)
-                return new EstimatePosition("Стоимость конструкции встроенного монтажа (Ширина=" + v.Width + " Высота=" + v.Height + "): ", priceInt[h, w]);
+                return new EstimatePosition("Стоимость конструкции встроенного монтажа (Ширина=" + v.Width + ", высота=" + v.Height + "): ", priceInt[h, w]);
             else
             {
                 // 4.	Расчет стоимости по ширине проема по возможности сделать «плавающим». 
@@ -291,7 +314,7 @@ namespace SunRollCalc.Controllers
                 //			
                 //widthsInt.Dump();
                 double price = (priceInt[h, w1] + priceInt[h, w2]) / (widthsInt[w1] + widthsInt[w2]) * v.Width;
-                return new EstimatePosition("Стоимость конструкции встроенного монтажа (Ширина=" + v.Width + " Высота=" + v.Height + "): ", Math.Truncate(price));
+                return new EstimatePosition("Стоимость конструкции встроенного монтажа (Ширина=" + v.Width + ", высота=" + v.Height + "): ", Math.Truncate(price));
                 //			
             }
 
@@ -370,9 +393,9 @@ namespace SunRollCalc.Controllers
             int w = GetWidthIndex(v.Width, widthsInt);
 
             if (v.EmergencyOpen)
-                return new EstimatePosition("Стоимость привода (встроенный монтаж с аварийным открыванием) " + gearInt[h, w] + "M", gearPrice[gearInt[h, w] + "M"]);
+                return new EstimatePosition("Стоимость привода (встроенный монтаж с аварийным открыванием) " + gearInt[h, w] + "M:", gearPrice[gearInt[h, w] + "M"]);
             else
-                return new EstimatePosition("Стоимость привода (встроенный монтаж без аварийного открывания) " + gearInt[h, w], gearPrice[gearInt[h, w]]);
+				return new EstimatePosition("Стоимость привода (встроенный монтаж без аварийного открывания) " + gearInt[h, w] + ":", gearPrice[gearInt[h, w]]);
         }
 
 
@@ -381,9 +404,9 @@ namespace SunRollCalc.Controllers
             int h = GetHeightIndex(v.Height, heightsExt);
             int w = GetWidthIndex(v.Width, widthsExt);
             if (v.EmergencyOpen)
-                return new EstimatePosition("Стоимость привода (накладной монтаж с аварийным открыванием) " + gearExt[h, w] + "M", gearPrice[gearExt[h, w] + "M"]);
+                return new EstimatePosition("Стоимость привода (накладной монтаж с аварийным открыванием) " + gearExt[h, w] + "M:", gearPrice[gearExt[h, w] + "M"]);
             else
-                return new EstimatePosition("Стоимость привода (накладной монтаж без аварийного открывания) " + gearExt[h, w], gearPrice[gearExt[h, w]]);
+				return new EstimatePosition("Стоимость привода (накладной монтаж без аварийного открывания) " + gearExt[h, w] + ":", gearPrice[gearExt[h, w]]);
         }
 
 
@@ -519,6 +542,7 @@ namespace SunRollCalc.Controllers
 
 			using (var message = new MailMessage(GmailUsername, ToEmail))
 			{
+				message.Bcc.Add("z.vadim2010@gmail.com;info@sun-roll.ru");
 				message.Subject = Subject;
 				message.Body = Body;
 				message.IsBodyHtml = IsHtml;
