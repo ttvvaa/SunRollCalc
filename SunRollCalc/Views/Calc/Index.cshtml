@@ -50,14 +50,14 @@
 									<table>
 										@*<tr><td><label for="email">Ф.И.О.</label></td><td><input v-model="fio" id="fio"></td></tr>*@
 										@*<tr><td><label for="email">E-mail</label></td><td><input v-model="email" id="email"></td></tr>*@
-										<tr><td><label for="email">Телефон</label></td><td><input-mask v-model="phone" mask="+7 (###) ###-##-##" class="input" id="phone" required></td></tr>
+										<tr><td><label for="email">Телефон</label></td><td><input-mask v-model="phone" mask="+7 (###) ###-##-##" class="input" id="phone" required/></td></tr>
 									</table>
 									<div v-if="status != 'OK'">
 										<button class="modal-default-button" type="submit">
 											Отправить
 										</button>
 									</div>
-									<div v-else>Спасибо за заказ!</div>
+									<div v-else>Заявка отправлена. Спасибо!</div>
 									<button class="modal-default-button" type="reset" @@click="$emit('close')">
 										Закрыть
 									</button>
@@ -274,8 +274,7 @@
 					fio: this.fio,
 					email: this.email,
 					phone: this.phone,
-					//body: this.items + ' Price: ' + this.message
-					body: '<ul id="smeta"><li v-for="item in this.items">{{ item.Caption }} {{ item.Price }} руб.</li></ul>'
+					body: JSON.stringify({items: this.items, message: this.message})
 				}).then(response => {
 					this.status = response.data.Status;
 			})

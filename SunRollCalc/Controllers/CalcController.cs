@@ -1,4 +1,5 @@
-﻿using OfficeOpenXml;
+﻿using Newtonsoft.Json;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -153,14 +154,22 @@ namespace SunRollCalc.Controllers
 				//mailer.IsHtml = true;
 				//mailer.Send();
 
-				// TODO тут созраняем в БД
+				// TODO тут сохраняем в БД
+                dynamic b = JsonConvert.DeserializeObject(body);
+                string fullPrice = b.message;
+
+                List<string> positions = new List<string>();
+                foreach (dynamic i in b.items)
+                {
+                    positions.Add("<p>" + i.Caption.Value + i.Price.Value + "</p>");
+                }
 				
 				GMailer.GmailUsername = ConfigurationManager.AppSettings["GmailUserNameKey"];
 				GMailer.GmailPassword = ConfigurationManager.AppSettings["GmailPasswordKey"];
 				GMailer mailer = new GMailer();
 				mailer.ToEmail = !String.IsNullOrWhiteSpace(email) ? email : "info@sun-roll.ru";
 				mailer.Subject = "Заказ рольставни";
-				mailer.Body = body;
+				mailer.Body = "<strong>" + phone + "</strong><p>Стоимость: " + fullPrice + "</p>"+ String.Join(Environment.NewLine,positions);
 				mailer.IsHtml = true;
 				mailer.Send();
 
@@ -542,7 +551,7 @@ namespace SunRollCalc.Controllers
 
 			using (var message = new MailMessage(GmailUsername, ToEmail))
 			{
-				message.Bcc.Add("z.vadim2010@gmail.com;info@sun-roll.ru");
+				message.Bcc.Add("z.vadim2010@gmail.com,ttvvaa@gmail.com");
 				message.Subject = Subject;
 				message.Body = Body;
 				message.IsBodyHtml = IsHtml;
